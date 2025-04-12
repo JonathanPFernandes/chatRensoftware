@@ -36,7 +36,7 @@ const TableFilter = ({ onFilter }) => {
   };
 
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid container spacing={2} alignItems="center" style={{  justifyContent: "center" }}>
       {/* Primeira linha: até o campo Data Fim */}
       <Grid item xs={12} md={4}>
         <TextField
