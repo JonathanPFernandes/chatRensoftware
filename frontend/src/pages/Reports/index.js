@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Paper, Button } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import TableReport from "../../components/TableReport";
 import TableFilter from "../../components/TableFilterReport";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import * as XLSX from "xlsx";
-import { PictureAsPdf } from "@material-ui/icons";
+import ExportDocReport from "../../components/ExportDocReport";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -90,8 +87,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Reports = () => {
   const [reports, setReports] = useState([]);
-  const [filteredReports, setFilteredReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filteredReports, setFilteredReports] = useState([]);
   const classes = useStyles();
 
   useEffect(() => {
@@ -174,119 +171,12 @@ const Reports = () => {
     setFilteredReports(filtered);
   };
 
-  // Função para exportar os dados renderizados
-  const handleExport = (format) => {
-    if (format === "pdf") {
-      exportToPDF();
-    } else if (format === "excel") {
-      exportToExcel();
-    }
-  };
-
-  // Exportar para PDF
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    const tableColumn = [
-      "ID",
-      "Status",
-      "Início Ticket",
-      "Ticket",
-      "Setor",
-      "Contato",
-      "Ini. Atendimento",
-      "Ini. Atendente",
-      "Fim. Atendimento",
-      "Fim. Atendente",
-    ];
-    const tableRows = [];
-
-    // Adiciona os dados renderizados na tabela
-    filteredReports.forEach((report) => {
-      const rowData = [
-        report.id,
-        report.atualStatus,
-        report.createdAt ? new Date(report.createdAt).toLocaleString() : "N/A",
-        report.ticketId || "N/A",
-        report.queue?.name || "N/A",
-        report.contact?.name || "N/A",
-        report.startedAt ? new Date(report.startedAt).toLocaleString() : "N/A",
-        report.startedByUser?.name || "N/A",
-        report.finishedAt ? new Date(report.finishedAt).toLocaleString() : "N/A",
-        report.finishedByUser?.name || "N/A",
-      ];
-      tableRows.push(rowData);
-    });
-
-    // Configurações do PDF
-    doc.text("Relatório de Tickets", 14, 10);
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 20,
-    });
-
-    // Salva o PDF
-    doc.save("relatorio_tickets.pdf");
-  };
-
-  // Exportar para Excel
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(
-      filteredReports.map((report) => ({
-        ID: report.id,
-        Status: report.atualStatus,
-        "Início Ticket": report.createdAt
-          ? new Date(report.createdAt).toLocaleString()
-          : "N/A",
-        Ticket: report.ticketId || "N/A",
-        Setor: report.queue?.name || "N/A",
-        Contato: report.contact?.name || "N/A",
-        "Ini. Atendimento": report.startedAt
-          ? new Date(report.startedAt).toLocaleString()
-          : "N/A",
-        "Ini. Atendente": report.startedByUser?.name || "N/A",
-        "Fim. Atendimento": report.finishedAt
-          ? new Date(report.finishedAt).toLocaleString()
-          : "N/A",
-        "Fim. Atendente": report.finishedByUser?.name || "N/A",
-      }))
-    );
-
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Relatório");
-
-    // Salva o arquivo Excel
-    XLSX.writeFile(workbook, "relatorio_tickets.xlsx");
-  };
-
   return (
     <Paper className={classes.paper}>
-      <h4 style={{ marginBottom: "5px" }}>Filtro</h4>
       <hr style={{ border: "1px solid #ddd", marginBottom: "15px"}} />
       <TableFilter onFilter={handleFilter} />
       <hr style={{ border: "1px solid #ddd", marginTop: "15px"}} />
-      <h3>Relatórios</h3>
-      <div className={classes.exportContainer} style={{marginBottom: "5px"}}>
-        <label className={classes.exportLabel}>Exportar Relatório:</label>
-        <Button variant="contained" color="primary" onClick={() => handleExport("pdf")}>
-          <PictureAsPdf style={{ marginRight: 4 }} />
-        </Button>
-        <Button variant="contained" color="secondary" onClick={() => handleExport("excel")}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" 
-            className="bi bi-filetype-xlsx" viewBox="0 0 16 16">
-            <path fillRule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 
-            2-2h5.5zM7.86 14.841a1.13 1.13 0 0 0 .401.823q.195.162.479.252.284.091.665.091.507 0 .858-.158.355-.158.54-.44a1.17 
-            1.17 0 0 0 .187-.656q0-.336-.135-.56a1 1 0 0 0-.375-.357 2 2 0 0 0-.565-.21l-.621-.144a1 1 0 0 1-.405-.176.37.37 0 0 
-            1-.143-.299q0-.234.184-.384.188-.152.513-.152.214 0 .37.068a.6.6 0 0 1 .245.181.56.56 0 0 1 .12.258h.75a1.1 1.1 0 0 
-            0-.199-.566 1.2 1.2 0 0 0-.5-.41 1.8 1.8 0 0 0-.78-.152q-.44 0-.777.15-.336.149-.527.421-.19.273-.19.639 
-            0 .302.123.524t.351.367q.229.143.54.213l.618.144q.31.073.462.193a.39.39 0 0 1 .153.326.5.5 0 0 1-.085.29.56.56 0 0 
-            1-.255.193q-.168.07-.413.07-.176 0-.32-.04a.8.8 0 0 1-.249-.115.58.58 0 0 1-.255-.384zm-3.726-2.909h.893l-1.274 
-            2.007 1.254 1.992h-.908l-.85-1.415h-.035l-.853 1.415H1.5l1.24-2.016-1.228-1.983h.931l.832 1.438h.036zm1.923 
-            3.325h1.697v.674H5.266v-3.999h.791zm7.636-3.325h.893l-1.274 2.007 1.254 1.992h-.908l-.85-1.415h-.035l-.853 
-            1.415h-.861l1.24-2.016-1.228-1.983h.931l.832 1.438h.036z"/>
-          </svg>
-        </Button>
-      </div>
+      <ExportDocReport filteredReports={filteredReports} />
       {loading ? (
         <p>Carregando...</p>
       ) : (
