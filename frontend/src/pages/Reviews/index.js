@@ -3,6 +3,7 @@ import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import TableReviews from "../../components/TableReviews";
 import TableShowReviews from "../../components/TableshowReviews";
+import TableAttendantsReviews from "../../components/TableAttendantsReviews";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +46,7 @@ const Reviews = () => {
 
   const tabs = [
     { id: "reviews", label: "Avaliações" },
+    {id: "attendants", label: "Atendentes"},
     { id: "create", label: "Criar Avaliações" },
   ];
 
@@ -65,6 +67,7 @@ const Reviews = () => {
       </div>
 
       {activeTab === "reviews" && <TableShowReviews />}
+      {activeTab === "attendants" && <TableAttendantsReviews />}
       {activeTab === "create" && <TableReviews />}
     </Paper>
   );

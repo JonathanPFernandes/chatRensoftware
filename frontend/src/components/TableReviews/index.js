@@ -28,6 +28,9 @@ import {
 } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
+  spaco: {
+    marginTop: theme.spacing(4),
+  },
   table: {
     minWidth: 650,
     border: "1px solid #ddd",
@@ -147,7 +150,7 @@ const TableReviews = () => {
   );
 
   return (
-    <div className={classes.tableContainer}>
+    <div className={classes.spaco}>
       <MainHeader>
         <Title>{i18n.t("reviews.title")} ({reviews.length})</Title>
         <MainHeaderButtonsWrapper>
