@@ -17,6 +17,7 @@ import Message from "./Message";
 import Queue from "./Queue";
 import User from "./User";
 import Whatsapp from "./Whatsapp";
+import ReviewTemplate from "./ReviewTemplate";
 
 @Table
 class Ticket extends Model<Ticket> {
@@ -68,6 +69,17 @@ class Ticket extends Model<Ticket> {
   @ForeignKey(() => Queue)
   @Column
   queueId: number;
+
+  @Default(false)
+  @Column
+  options: boolean;
+  
+  @ForeignKey(() => ReviewTemplate)
+  @Column
+  templateId: number;
+
+  @BelongsTo(() => ReviewTemplate)
+  template: ReviewTemplate;
 
   @BelongsTo(() => Queue)
   queue: Queue;

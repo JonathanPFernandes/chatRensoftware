@@ -29,6 +29,18 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "SET NULL"
       },
+      options: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      templateId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: { model: "ReviewTemplates", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
       createdAt: {
         type: DataTypes.DATE(6),
         allowNull: false

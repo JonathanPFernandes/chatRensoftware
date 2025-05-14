@@ -45,7 +45,7 @@ const AcceptTicketWithouSelectQueue = ({ modalOpen, onClose, ticketId }) => {
 	const [selectedQueue, setSelectedQueue] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { user } = useContext(AuthContext);
-	console.log("Redirecting to ticket ID:", ticketId);
+	
 
 const handleClose = () => {
 	onClose();

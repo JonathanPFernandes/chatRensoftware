@@ -38,13 +38,13 @@ sudo systemctl status mysql
 6. Acessando o mysql server
 
 ```bash
-sudo mysql -u root
+sudo mysql -u root -p
 ```
 
 7. Criando o BD
 
 ```bash
-CREATE DATABASE press-ticket CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE press_ticket CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 ```
 
 8. Acessar o BD do mysql

@@ -19,6 +19,7 @@ import ApiDocs from "../pages/ApiDocs/";
 import ApiKey from "../pages/ApiKey/";
 import Tags from "../pages/Tags";
 import Integrations from "../pages/Integrations";
+import Reviews from "../pages/Reviews";
 
 import { AuthProvider } from "../context/Auth/AuthContext";
 import { WhatsAppsProvider } from "../context/WhatsApp/WhatsAppsContext";
@@ -44,6 +45,7 @@ const Routes = () => {
               <Route exact path="/apidocs" component={ApiDocs} isPrivate />
               <Route exact path="/apikey" component={ApiKey} isPrivate />
               <Route exact path="/Queues" component={Queues} isPrivate />
+              <Route exact path="/reviews" component={Reviews} isPrivate />
               <Route exact path="/reports" component={Reports} isPrivate />
               <Route exact path="/Tags" component={Tags} isPrivate />
               <Route exact path="/Integrations" component={Integrations} isPrivate />

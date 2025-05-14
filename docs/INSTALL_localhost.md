@@ -13,13 +13,13 @@ CREATE DATABASE press-ticket CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 2. Clonar o repositório
 
 ```bash
-git clone https://github.com/rtenorioh/Press-Ticket.git Press-Ticket
+git clone https://github.com/JonathanPFernandes/chatRensoftware.git
 ```
 
 3. Entrar no diretório backend do Press-Ticket
 
 ```bash
-cd Press-Ticket/backend
+cd Rensoftware/backend
 ```
 
 4. Criar o arquivo .env e inserir as informações do item 5

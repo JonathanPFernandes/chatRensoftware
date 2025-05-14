@@ -78,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Ticket = () => {
   const { ticketId } = useParams();
-  console.log("Ticket ID from useParams:", ticketId);
   const history = useHistory();
   const classes = useStyles();
 
@@ -89,17 +88,14 @@ const Ticket = () => {
 
   useEffect(() => {
     setLoading(true);
-    console.log("Fetching ticket with ID:", ticketId);
     const delayDebounceFn = setTimeout(() => {
       const fetchTicket = async () => {
         try {
           const { data } = await api.get("/tickets/" + ticketId);
-          console.log("Fetching ticket with ID:", ticketId);
           setContact(data.contact);
           setTicket(data);
           setLoading(false);
         } catch (err) {
-          console.error("Error fetching ticket:", err);
           setLoading(false);
           toastError(err);
         }

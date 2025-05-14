@@ -54,8 +54,8 @@ const Chart = () => {
 				<div>
 					<div style={{ backgroundColor: "#333333ff", borderRadius: "4px", outline: "none" }}>
 						<div>
-							{payload.map((pld) => (
-								<div style={{ display: "inline-block", padding: 10 }}>
+							{payload.map((pld, index) => (
+								<div key={index} style={{ display: "inline-block", padding: 10 }}>
 									<div style={{ color: "white", fontWeight: "600", fontSize: "13px" }}>{`${label}`}</div>
 									<div style={{ color: "white", fontWeight: "400", fontSize: "13px" }}>Tickets: {pld.value}</div>
 								</div>

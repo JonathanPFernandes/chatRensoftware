@@ -392,6 +392,7 @@ const messages = {
           quickAnswers: "Respostas Rápidas",
           tags: "Tags",
           queues: "Setores",
+          reviews: "Avaliações",
           reports: "Relatórios",
           administration: "Administração",
           users: "Atendentes",
@@ -490,6 +491,45 @@ const messages = {
         confirmationModal: {
           deleteTitle: "Excluir",
           deleteMessage: "Todos os dados do atendente serão perdidos. Os tickets abertos deste atendente serão movidos para a espera.",
+        },
+      },
+      reviews: {
+        title: "Avaliações",
+        table: {
+          name: "Nome",
+          message: "Mensagem",
+          status: "Status",
+          queueId: "Setor",
+          actions: "Ações",
+        },
+        buttons: {
+          add: "Adicionar Avaliação",
+          deleteAll: "Excluir Todas Avaliações",
+        },
+        toasts: {
+          deleted: "Avaliação excluída com sucesso.",
+          deletedAll: "Todas as Avaliações excluídas.",
+        },
+        confirmationModal: {
+          deleteTitle: "Você tem certeza que quer excluir esta Avaliação?",
+          deleteAllTitle: "Você tem certeza que quer excluir todas Avaliações?",
+          deleteMessage: "Esta ação não pode ser revertida.",
+          deleteAllMessage: "Esta ação não pode ser revertida.",
+        },
+      },
+      reports: {
+        title: "Relatórios",
+        buttons: {
+          download: "Baixar",
+          filter: "Filtrar",
+          reset: "Resetar",
+        },
+        filters: {
+          startDate: "Data Inicial",
+          endDate: "Data Final",
+          queue: "Setor",
+          user: "Atendente",
+          status: "Status",
         },
       },
       company:{

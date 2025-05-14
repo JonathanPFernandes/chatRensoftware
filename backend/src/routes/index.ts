@@ -16,6 +16,8 @@ import integrationRoutes from "./integrationRoutes";
 // import companyRoutes from "./companyRoutes";
 import systemRoutes from "./systemRoutes";
 import reportRoutes from "./reportRoutes";
+import reviewRoutes from "./reviewsRoutes";
+import templateRoutes from "./templateRoutes";
 
 const routes = Router();
 
@@ -35,5 +37,7 @@ routes.use(integrationRoutes);
 // routes.use(companyRoutes);
 routes.use(systemRoutes);
 routes.use(reportRoutes);
+routes.use(reviewRoutes);
+routes.use(templateRoutes);
 
 export default routes;

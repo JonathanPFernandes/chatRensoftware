@@ -82,7 +82,7 @@ const reducer = (state, action) => {
 
 		newTickets.forEach((ticket) => {
 			const ticketIndex = state.findIndex((t) => t.id === ticket.id);
-			console.log("ticket aqui", ticket.id);
+		
 			if (ticketIndex !== -1) {
 				state[ticketIndex] = ticket;
 				if (ticket.unreadMessages > 0) {

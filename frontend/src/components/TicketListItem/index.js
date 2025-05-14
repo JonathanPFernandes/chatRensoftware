@@ -160,14 +160,13 @@ const TicketListItem = ({ ticket, userId }) => {
 	const [acceptTicketWithouSelectQueueOpen, setAcceptTicketWithouSelectQueueOpen] = useState(false);
 	const [tag, setTag] = useState([]);
 	const [uName, setUserName] = useState(null);
-	console.log("Ticket ID from props:", ticketId);
+
 
 	useEffect(() => {
 		const delayDebounceFn = setTimeout(() => {
 			const fetchTicket = async () => {
 				try {
 					const { data } = await api.get("/tickets/" + ticket.id);
-					console.log("ticket apos o GET:", ticket.id);
 					setTag(data?.contact?.tags);
 				} catch (err) {
 				}
@@ -412,7 +411,7 @@ const TicketListItem = ({ ticket, userId }) => {
 								<Tooltip title={i18n.t("ticketsList.items.connection")}>
 									<Badge
 										className={classes.Radiusdot}
-										// overlap="rectangular"
+										//overlap="rectangular"
 										style={{
 											backgroundColor: system.color.lightTheme.palette.primary,
 											height: 16,
@@ -435,7 +434,7 @@ const TicketListItem = ({ ticket, userId }) => {
 								<Tooltip title={i18n.t("ticketsList.items.queue")}>
 									<Badge
 										className={classes.Radiusdot}
-										// overlap="rectangular"
+										//overlap="rectangular"
 										style={{
 											backgroundColor: ticket.queue?.color || "#7C7C7C",
 											height: 16,
@@ -456,7 +455,7 @@ const TicketListItem = ({ ticket, userId }) => {
 								<Tooltip title={i18n.t("ticketsList.items.user")}>
 									<Badge
 										className={classes.Radiusdot}
-										// overlap="rectangular"
+										//overlap="rectangular"
 										style={{
 											backgroundColor: "black",
 											height: 16,
@@ -495,7 +494,7 @@ const TicketListItem = ({ ticket, userId }) => {
 							className={classes.bottomButton}
 							color="primary"
 							onClick={e => handleOpenAcceptTicketWithouSelectQueue()}
-							loading={loading}>
+							loading={loading ? "true" : undefined}>
 							<Done />
 						</IconButton>
 					</Tooltip>
@@ -506,7 +505,8 @@ const TicketListItem = ({ ticket, userId }) => {
 						<IconButton
 							className={classes.bottomButton}
 							color="primary"
-							onClick={e => handleAcepptTicket(ticket.id)} >
+							onClick={e => handleAcepptTicket(ticket.id)}
+							loading={loading ? "true" : undefined} >
 							<Done />
 						</IconButton>
 					</Tooltip>

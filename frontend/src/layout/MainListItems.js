@@ -8,8 +8,9 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
+import StarHalfIcon from '@material-ui/icons/StarHalf';
 
 import {
   AccountTreeOutlined,
@@ -153,6 +154,11 @@ const MainListItems = (props) => {
               to="/queues"
               primary={i18n.t("mainDrawer.listItems.queues")}
               icon={<AccountTreeOutlined />}
+            />
+            <ListItemLink
+              to="/reviews"
+              primary={i18n.t("mainDrawer.listItems.reviews")}
+              icon={<StarHalfIcon />}
             />
             <ListItemLink
               to="/reports"

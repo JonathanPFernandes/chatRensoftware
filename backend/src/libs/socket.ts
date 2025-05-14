@@ -16,6 +16,7 @@ export const initIO = (httpServer: Server): SocketIO => {
     logger.info("Client Connected");
     socket.on("joinChatBox", (ticketId: string) => {
       logger.info("A client joined a ticket channel");
+      console.log(`Cliente ingressou no ticket ${ticketId}`);
       socket.join(ticketId);
     });
 

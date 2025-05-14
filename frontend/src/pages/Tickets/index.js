@@ -67,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
 const Chat = () => {
   const classes = useStyles();
   const { ticketId } = useParams();
-  console.log("Page ticket with ID:", ticketId);
   return (
     <div className={classes.chatContainer}>
       <div className={classes.chatPapper}>
