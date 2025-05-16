@@ -87,6 +87,10 @@ const TableAttendantsReviews = () => {
     return classes.green;
   };
 
+  if (loading) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className={classes.spaco}>
       <MainHeader>

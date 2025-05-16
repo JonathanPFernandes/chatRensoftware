@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#f3f4f6",
     borderBottom: "1px solid red",
     transition: "all 0.2s ease-in-out",
+    "&:hover": {
+      backgroundColor: "#e5e7eb",
+    },
     "&:first-child": {
       borderTopLeftRadius: "8px",
     },

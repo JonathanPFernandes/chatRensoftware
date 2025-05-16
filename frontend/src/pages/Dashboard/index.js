@@ -5,14 +5,16 @@ import Container from "@material-ui/core/Container"
 import Grid from "@material-ui/core/Grid"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography";
-
 import useTickets from "../../hooks/useTickets"
-
 import { AuthContext } from "../../context/Auth/AuthContext";
-
 import { i18n } from "../../translate/i18n";
-
 import Chart from "./Chart"
+import AttendantsBarChart from "../../components/AttendantsBarChart";
+import ResolutionTimeChart from "../../components/ResolutionTimeChart";
+import TicketTypePieChart from "../../components/TicketTypePieChart";
+import AttendantsRadarChart from "../../components/AttendantsRadarChart";
+import WaitingTimeChart from "../../components/WaitingTimeChart";
+
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -24,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 		display: "flex",
 		overflow: "auto",
 		flexDirection: "column",
-		height: 240,
+		height: 280,
 	},
 	customFixedHeightPaper: {
 		padding: theme.spacing(2),
@@ -39,6 +41,16 @@ const useStyles = makeStyles(theme => ({
 		overflow: "auto",
 		flexDirection: "column",
 		height: "100%",
+	},
+	responsiveText: {
+		fontSize: "1.25rem", // Tamanho padrão (h6)
+		[theme.breakpoints.down("sm")]: {
+		fontSize: "1rem", // Tamanho menor para telas pequenas
+		textAlign: "center",
+		},
+		[theme.breakpoints.down("xs")]: {
+		fontSize: "0.875rem", // Tamanho ainda menor para telas muito pequenas
+		},
 	},
 }))
 
@@ -69,7 +81,7 @@ const Dashboard = () => {
 				<Grid container spacing={3}>
 					<Grid item xs={4}>
 						<Paper className={classes.customFixedHeightPaper} style={{ overflow: "hidden" }}>
-							<Typography component="h3" variant="h6" color="primary" paragraph>
+							<Typography component="h3" variant="h6" color="primary" paragraph  className={classes.responsiveText}>
 								{i18n.t("dashboard.messages.inAttendance.title")}
 							</Typography>
 							<Grid item>
@@ -108,6 +120,47 @@ const Dashboard = () => {
 							<Chart />
 						</Paper>
 					</Grid>
+					{/* Gráficos */}
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.fixedHeightPaper}>
+                            <Typography component="h3" variant="h6" color="primary" paragraph>
+                                Atendimentos por Atendente
+                            </Typography>
+                            <AttendantsBarChart />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.fixedHeightPaper}>
+                            <Typography component="h3" variant="h6" color="primary" paragraph>
+                                Tempo Médio de Resolução
+                            </Typography>
+                            <ResolutionTimeChart />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.fixedHeightPaper}>
+                            <Typography component="h3" variant="h6" color="primary" paragraph>
+                                Avaliações por Tipo de Ticket
+                            </Typography>
+                            <TicketTypePieChart />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.fixedHeightPaper}>
+                            <Typography component="h3" variant="h6" color="primary" paragraph>
+                                Comparação de Atendentes
+                            </Typography>
+                            <AttendantsRadarChart />
+                        </Paper>
+                    </Grid>
+					{/* <Grid item xs={12} md={6}>
+                        <Paper className={classes.fixedHeightPaper}>
+                            <Typography component="h3" variant="h6" color="primary" paragraph>
+                                Tempo Médio de Espera
+                            </Typography>
+                            <WaitingTimeChart />
+                        </Paper>
+                    </Grid> */}
 				</Grid>
 			</Container>
 		</div>
