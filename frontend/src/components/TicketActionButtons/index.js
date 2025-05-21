@@ -54,7 +54,7 @@ const TicketActionButtons = ({ ticket }) => {
 
       if (!activeTemplate) {
         toast.error("Nenhum template ativo encontrado para este setor.");
-        return;
+        return  handleUpdateTicketStatus(null, "closed", userId);
       }
 
       setOptions(activeTemplate.options || []);
@@ -114,9 +114,10 @@ const TicketActionButtons = ({ ticket }) => {
 
         if (isValidResponse) {
           toast.success("Avaliação finalizada com sucesso!");
-
+          console.log("Avaliação finalizada com sucesso!");
           // Cancela o timeout pendente se houver
           if (timeoutRef.current) {
+            console.log("Timeout cancelado.");
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
           }

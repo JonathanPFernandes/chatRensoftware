@@ -49,6 +49,15 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  logo: {
+    width: "100%", // Tamanho padrão
+    maxWidth: "500px", // Limite máximo para telas maiores
+    height: "auto",
+    marginBottom: theme.spacing(4),
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "300px", // Reduzir tamanho em telas menores
+    },
+  },
 }));
 
 const Login = () => {
@@ -72,7 +81,7 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img alt="logo" src={logo}></img>
+        <img alt="logo" src={logo} className={classes.logo}></img>
         <Typography component="h1" variant="h5">
           {i18n.t("login.title")}
         </Typography>

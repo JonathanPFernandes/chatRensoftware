@@ -10,24 +10,40 @@ import {
   InputLabel,
 } from "@material-ui/core";
 
-const ExportDocReport = ({ filteredReports, filters }) => {
+const ExportAverageReviewsByAttendant = ({ reviews, filters }) => {
   const [exportOption, setExportOption] = useState("");
+
+  // Agrupa avaliações por atendente
+  const groupedData = reviews.reduce((acc, review) => {
+    const attendant = review.user?.name || "Desconhecido";
+    if (!acc[attendant]) acc[attendant] = { total: 0, count: 0, tickets: new Set() };
+    acc[attendant].total += review.nota;
+    acc[attendant].count++;
+    acc[attendant].tickets.add(review.ticketId);
+    return acc;
+  }, {});
+
+  const data = Object.entries(groupedData).map(([attendant, { total, count, tickets }]) => ({
+    Atendente: attendant,
+    "Média de Avaliações": (total / count).toFixed(2),
+    "Total de Tickets": tickets.size,
+  }));
 
   const handleExportChange = async (event) => {
     const selected = event.target.value;
     setExportOption(selected);
 
     if (selected === "pdf") {
-      await exportToPDF();
+      exportToPDF();
     } else if (selected === "excel") {
-      await exportToExcel();
+      exportToExcel();
     }
 
     setExportOption("");
   };
 
   const exportToPDF = () => {
-    if (!filteredReports || filteredReports.length === 0) {
+    if (data.length === 0) {
       alert("Nenhum dado disponível para exportar.");
       return;
     }
@@ -35,12 +51,12 @@ const ExportDocReport = ({ filteredReports, filters }) => {
     const doc = new jsPDF();
 
     // Estilo do título
-    doc.setFontSize(16); // Tamanho da fonte do título
+    doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
-    doc.text("Relatório de Tickets", 14, 10);
+    doc.text("Média de Avaliações por Atendente", 14, 10);
 
     // Estilo dos filtros aplicados
-    doc.setFontSize(10); // Tamanho da fonte dos filtros
+    doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
 
     // Mapeamento de rótulos personalizados
@@ -55,59 +71,32 @@ const ExportDocReport = ({ filteredReports, filters }) => {
     };
 
     // Filtrar apenas os filtros que possuem valores e aplicar os rótulos
-    const appliedFilters = Object.entries(filters)
-      .filter(([key, value]) => value?.trim()) // Apenas filtros com valores
-      .map(
-        ([key, value]) =>
-          `${filterLabels[key] || key}: ${value}` // Usar rótulo personalizado ou o nome original
-      )
+    const appliedFilters = Object.entries(filters || {})
+      .filter(([key, value]) => value?.trim())
+      .map(([key, value]) => `${filterLabels[key] || key}: ${value}`)
       .join(", ");
 
     if (appliedFilters) {
       doc.text("Filtros Aplicados:", 14, 20);
-      doc.setTextColor(100); // Cor do texto dos filtros
-      doc.text(appliedFilters, 14, 25, { maxWidth: 180 }); // Quebra de linha automática
+      doc.setTextColor(100);
+      doc.text(appliedFilters, 14, 25, { maxWidth: 180 });
     }
 
-    // Adicionar a tabela
-    const headers = [
-      "ID",
-      "Status",
-      "Início Ticket",
-      "Ticket",
-      "Setor",
-      "Contato",
-      "Ini. Atendimento",
-      "Ini. Atendente",
-      "Fim. Atendimento",
-      "Fim. Atendente",
-    ];
-    const rows = filteredReports.map((r) => [
-      r.id,
-      r.atualStatus,
-      r.createdAt ? new Date(r.createdAt).toLocaleString() : "N/A",
-      r.ticketId || "N/A",
-      r.queue?.name || "N/A",
-      r.contact?.name || "N/A",
-      r.startedAt ? new Date(r.startedAt).toLocaleString() : "N/A",
-      r.startedByUser?.name || "N/A",
-      r.finishedAt ? new Date(r.finishedAt).toLocaleString() : "N/A",
-      r.finishedByUser?.name || "N/A",
-    ]);
-
     autoTable(doc, {
-      head: [headers],
-      body: rows,
-      startY: appliedFilters ? 35 : 20, // Ajustar a posição da tabela com base nos filtros
-      styles: { fontSize: 9 }, // Diminuir a fonte da tabela
-      headStyles: { fillColor: [22, 160, 133] }, // Cor do cabeçalho
+      head: [["Atendente", "Média de Avaliações", "Total de Tickets"]],
+      body: data.map((item) => [
+        item.Atendente,
+        item["Média de Avaliações"],
+        item["Total de Tickets"],
+      ]),
+      startY: appliedFilters ? 35 : 20,
     });
 
-    doc.save("relatorio_tickets.pdf");
+    doc.save("avaliacoes_por_atendente.pdf");
   };
 
   const exportToExcel = () => {
-    if (!filteredReports || filteredReports.length === 0) {
+    if (data.length === 0) {
       alert("Nenhum dado disponível para exportar.");
       return;
     }
@@ -124,47 +113,29 @@ const ExportDocReport = ({ filteredReports, filters }) => {
     };
 
     // Filtrar apenas os filtros que possuem valores e aplicar os rótulos
-    const appliedFilters = Object.entries(filters)
+    const appliedFilters = Object.entries(filters || {})
       .filter(([key, value]) => value?.trim())
       .map(([key, value]) => `${filterLabels[key] || key}: ${value}`)
       .join(", ");
 
     // Criar o conteúdo da planilha
     const worksheetData = [
-      ["Relatório de Tickets"], // Título
+      ["Média de Avaliações por Atendente"], // Título
       [appliedFilters || "Sem filtros aplicados"], // Filtros
       [], // Linha vazia para separar do conteúdo
-      [
-        "ID",
-        "Status",
-        "Início Ticket",
-        "Ticket",
-        "Setor",
-        "Contato",
-        "Ini. Atendimento",
-        "Ini. Atendente",
-        "Fim. Atendimento",
-        "Fim. Atendente",
-      ], // Cabeçalho
-      ...filteredReports.map((r) => [
-        r.id,
-        r.atualStatus,
-        r.createdAt ? new Date(r.createdAt).toLocaleString() : "N/A",
-        r.ticketId || "N/A",
-        r.queue?.name || "N/A",
-        r.contact?.name || "N/A",
-        r.startedAt ? new Date(r.startedAt).toLocaleString() : "N/A",
-        r.startedByUser?.name || "N/A",
-        r.finishedAt ? new Date(r.finishedAt).toLocaleString() : "N/A",
-        r.finishedByUser?.name || "N/A",
+      ["Atendente", "Média de Avaliações", "Total de Tickets"], // Cabeçalho
+      ...data.map((item) => [
+        item.Atendente,
+        item["Média de Avaliações"],
+        item["Total de Tickets"],
       ]),
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, worksheet, "Relatório");
-    XLSX.writeFile(wb, "relatorio_tickets.xlsx");
+    XLSX.utils.book_append_sheet(wb, worksheet, "Avaliações por Atendente");
+    XLSX.writeFile(wb, "avaliacoes_por_atendente.xlsx");
   };
 
   return (
@@ -190,4 +161,4 @@ const ExportDocReport = ({ filteredReports, filters }) => {
   );
 };
 
-export default ExportDocReport;
+export default ExportAverageReviewsByAttendant;

@@ -153,14 +153,14 @@ const Dashboard = () => {
                             <AttendantsRadarChart />
                         </Paper>
                     </Grid>
-					{/* <Grid item xs={12} md={6}>
-                        <Paper className={classes.fixedHeightPaper}>
-                            <Typography component="h3" variant="h6" color="primary" paragraph>
-                                Tempo Médio de Espera
-                            </Typography>
-                            <WaitingTimeChart />
-                        </Paper>
-                    </Grid> */}
+					<Grid item xs={12}>
+						<Paper className={classes.fixedHeightPaper}>
+							<Typography component="h3" variant="h6" color="primary" paragraph>
+								Tempo Médio de Espera
+							</Typography>
+							<WaitingTimeChart />
+						</Paper>
+					</Grid>
 				</Grid>
 			</Container>
 		</div>

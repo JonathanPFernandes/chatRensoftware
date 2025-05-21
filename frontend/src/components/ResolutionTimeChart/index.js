@@ -19,6 +19,12 @@ const ResolutionTimeChart = () => {
       const groupedData = reports.reduce((acc, report) => {
         const userName = report.finishedByUser?.name || "Desconhecido";
 
+        // Verifica se os campos startedAt e finishedAt são válidos
+        if (!report.startedAt || !report.finishedAt) {
+          console.warn(`Dados inválidos para o ticket ${report.id}:`, report);
+          return acc;
+        }
+
         // Calcula o tempo de atendimento em minutos
         const resolutionTime = (new Date(report.finishedAt) - new Date(report.startedAt)) / 60000;
 
@@ -47,7 +53,9 @@ const ResolutionTimeChart = () => {
       <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
-        <YAxis />
+        <YAxis
+          tickFormatter={(value) => (value > 0 ? formatTime(value) : "N/A")} // Exibe "N/A" para valores inválidos
+        />
         <Tooltip
           formatter={(value) => formatTime(value)} // Formata o tempo no tooltip
           labelFormatter={(label) => `Atendente: ${label}`} // Formata o rótulo do tooltip

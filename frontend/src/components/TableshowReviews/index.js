@@ -13,8 +13,9 @@ import {
   TableHead,
   TableRow,
   TableContainer,
+  TablePagination,
 } from "@material-ui/core";
-import StarIcon from '@material-ui/icons/Star';
+import StarIcon from "@material-ui/icons/Star";
 
 const useStyles = makeStyles((theme) => ({
   spaco: {
@@ -22,22 +23,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TableshowReviews = () => {
+const TableshowReviews = ({ reviews: externalReviews }) => {
   const classes = useStyles();
   const [reviews, setReviews] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const { data } = await api.get("/reviews");
-        setReviews(data);
-      } catch (err) {
-        toast.error("Erro ao carregar reviews de avaliação");
-      }
-    };
+    if (!externalReviews) {
+      const fetchReviews = async () => {
+        try {
+          const { data } = await api.get("/reviews");
+          setReviews(data);
+        } catch (err) {
+          toast.error("Erro ao carregar reviews de avaliação");
+        }
+      };
 
-    fetchReviews();
-  }, []);
+      fetchReviews();
+    } else {
+      setReviews(externalReviews); // Usa os dados externos se fornecidos
+    }
+  }, [externalReviews]);
 
   const formatDate = (isoString) => {
     const date = new Date(isoString);
@@ -49,6 +56,21 @@ const TableshowReviews = () => {
       minute: "2-digit",
     });
   };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Resetar para a primeira página
+  };
+
+  // Paginação dos dados
+  const paginatedReviews = reviews.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <div className={classes.spaco}>
@@ -71,18 +93,18 @@ const TableshowReviews = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reviews.map((review) => (
+            {paginatedReviews.map((review) => (
               <TableRow key={review.id}>
                 <TableCell>{review.contato?.name || "-"}</TableCell>
                 <TableCell>{review.queue?.name || "-"}</TableCell>
                 <TableCell>{review.ticketId || "-"}</TableCell>
                 <TableCell>{review.user?.name || "-"}</TableCell>
                 <TableCell>
-                    {review.nota
-                        ? [...Array(review.nota)].map((_, i) => (
-                            <StarIcon key={i} style={{ color: "#FFD700" }} />
-                        ))
-                        : "-"}
+                  {review.nota
+                    ? [...Array(review.nota)].map((_, i) => (
+                        <StarIcon key={i} style={{ color: "#FFD700" }} />
+                      ))
+                    : "-"}
                 </TableCell>
                 <TableCell>{formatDate(review.createdAt)}</TableCell>
               </TableRow>
@@ -90,6 +112,16 @@ const TableshowReviews = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        component="div"
+        count={reviews.length}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        labelRowsPerPage="Linhas por página"
+      />
     </div>
   );
 };

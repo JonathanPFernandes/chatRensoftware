@@ -14,13 +14,15 @@ const useStyles = makeStyles((theme) => ({
   },
   tabContainer: {
     display: "flex",
-    borderBottom: "1px solid red",
+    overflowX: "auto",
+    whiteSpace: "nowrap",
+    gap: "1px",
   },
   tabButton: {
     padding: theme.spacing(1, 3),
     border: "none",
     cursor: "pointer",
-    backgroundColor: "#f3f4f6",
+    backgroundColor: "#dedaf2",
     borderBottom: "1px solid red",
     transition: "all 0.2s ease-in-out",
     "&:hover": {
@@ -55,7 +57,7 @@ const Reviews = () => {
 
   return (
     <Paper className={classes.paper}>
-      <div className="mb-4 flex border-b border-red-200">
+      <div className={classes.tabContainer}>
         {tabs.map((tab) => (
           <button
             key={tab.id}
